@@ -1,10 +1,12 @@
+#pragma once
+
 #include <memory>
 
+/// Template to generate binary-tree nodes.
 template <typename Key>
 class BinNode
 {
 public:
-    
     using KeyType = Key;
     using KeyRefType = Key&;
     using KeyCRefType = const Key&;
@@ -15,7 +17,14 @@ public:
     BinNode(KeyURefType k) noexcept;
 
     BinNode(KeyURefType k, PointerType l, PointerType r) noexcept;
-    
+
+    virtual ~BinNode() = default;
+
+    // Non-copyable, non-movable, and non-assignable
+    BinNode(const BinNode& node) = delete;
+    BinNode(BinNode&& node) = delete;
+    BinNode operator = (BinNode node) = delete;
+
     KeyRefType get_key() noexcept;
 
     KeyCRefType get_key() const noexcept;
@@ -24,19 +33,7 @@ public:
 
     PointerRefType get_rchild() noexcept;
 
-    virtual ~BinNode() = default;
-
-    PointerRefType CreateNode(int);
-
-    PointerRefType InsertNode(PointerRefType ,int);
-
-    PointerRefType FindNode(PointerRefType ,int);
-
-    PointerRefType Join_Ex(PointerRefType , PointerRefType);
-
-    void InOrder(PointerRefType);
-
-    PointerRefType RemoveNode(PointerRefType , int);
+    bool is_leaf() const noexcept;
 
 private:
     KeyType key;
@@ -82,6 +79,11 @@ std::shared_ptr<BinNode<Key>>& BinNode<Key>::get_rchild() noexcept
     return this->rchild;
 }
 
+template <typename Key>
+bool BinNode<Key>::is_leaf() const noexcept
+{
+    return this->lchild == nullptr && this->rchild == nullptr;
+}
 
 // Helper functions
 template <typename BinNodeType>
