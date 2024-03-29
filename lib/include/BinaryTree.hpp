@@ -23,6 +23,7 @@ public:
   BinaryTree(const BinaryTree& node) = delete;
   BinaryTree(BinaryTree&& node) = delete;
   BinaryTree operator = (BinaryTree node) = delete;
+  
 private:
   NodePtrType root;
 };
@@ -31,6 +32,12 @@ template <typename Key>
 BinaryTree<Key>::BinaryTree(KeyURefType k): root{std::make_shared<BinNode<Key>>(std::move(k))}
 {
   // empty
+}
+
+template <typename Key>
+inline typename BinaryTree<Key>::NodePtrRefType BinaryTree<Key>::get_root() noexcept
+{
+    return this->root;
 }
 
 template <typename Key>
@@ -51,10 +58,4 @@ bool BinaryTree<Key>::insert(KeyURefType k, NodePtrRefType node, Cmp c)
   if (c(k, K(node))) insert(std::move(k), L(node), c);
   if (c(K(node), k)) insert(std::move(k), R(node), c);
   return false;
-}
-
-template <typename Key>
-inline typename BinaryTree<Key>::NodePtrRefType BinaryTree<Key>::get_root() noexcept
-{
-    return this->root;
 }
